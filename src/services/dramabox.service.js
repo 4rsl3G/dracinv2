@@ -2,11 +2,18 @@ const axios = require('axios');
 const cache = require('../utils/cache');
 
 const BASE_URL = process.env.API_BASE_URL || 'https://dramabox-api-rho.vercel.app';
+// src/services/dramabox.service.js
+
 const apiClient = axios.create({
     baseURL: BASE_URL,
-    timeout: 10000,
-    headers: { 'User-Agent': 'CinemaBox-Elite/2.0' }
+    timeout: 15000, // Naikkan timeout
+    headers: { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Referer': 'https://dramabox.com/' 
+    }
 });
+
 
 // --- DATA NORMALIZATION ---
 const normalizeBook = (item) => {
