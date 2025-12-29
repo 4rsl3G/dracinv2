@@ -1,0 +1,27 @@
+<nav class="fixed top-0 w-full z-40 transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent p-4" id="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-8">
+            <a href="/" class="text-3xl font-bold text-netRed tracking-tighter">NETFLIX <span class="text-xs text-white font-normal bg-gray-800 px-1 rounded">PRO</span></a>
+            <div class="hidden md:flex gap-4 text-sm font-medium text-gray-300">
+                <a href="/" class="hover:text-white transition">Home</a>
+                <a href="#" class="hover:text-white transition">TV Shows</a>
+                <a href="#" class="hover:text-white transition">Movies</a>
+                <a href="#" class="hover:text-white transition">My List</a>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Titles, people, genres" 
+                       class="bg-black/50 border border-gray-600 rounded-sm py-1 px-3 pl-8 text-sm focus:outline-none focus:border-white w-0 focus:w-64 transition-all duration-300 placeholder-gray-400">
+                <i class="fas fa-search absolute left-2 top-1.5 text-gray-400"></i>
+            </div>
+            
+            <select id="langSelect" class="bg-black text-white text-xs border border-white rounded px-2 py-1">
+                <option value="en">English</option>
+            </select>
+
+            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-xs font-bold">Pro</div>
+        </div>
+    </div>
+</nav>
