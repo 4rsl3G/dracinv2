@@ -7,7 +7,9 @@ const BASE_URL = process.env.API_BASE_URL;
 class CacheService {
   
   static async getOrFetch(endpointKey, params, ttlOverride = null) {
-    const { endpoint, lang = 'en', query = null, code = null, ep = null } = params;
+    // FIX: Use endpointKey if params.endpoint is missing
+    const endpoint = params.endpoint || endpointKey;
+    const { lang = 'en', query = null, code = null, ep = null } = params;
     
     // Generate unique key
     const cacheKey = `${endpoint}:${lang}:${code || ''}:${ep || ''}:${query || ''}`;
@@ -27,6 +29,7 @@ class CacheService {
 
     // 2. Fetch Upstream
     let apiUrl = `${BASE_URL}/${endpoint}`;
+    
     // Construct Query Params
     const queryParams = new URLSearchParams();
     if(lang) queryParams.append('lang', lang);
@@ -34,7 +37,9 @@ class CacheService {
     if(ep) queryParams.append('ep', ep);
     
     // Handle path parameters (episodes/code, play/code)
+    // Note: 'episodes' and 'play' usually require the code in the URL path, not just query params
     if (endpoint === 'episodes' || endpoint === 'play') {
+      if (!code) throw new Error(`Endpoint ${endpoint} requires a 'code' parameter.`);
       apiUrl = `${BASE_URL}/${endpoint}/${code}`;
     }
 
@@ -78,8 +83,7 @@ class CacheService {
 
       return data;
     } catch (error) {
-      console.error('Upstream Fetch Error:', error.message);
-      // Fallback: If expired cache exists, return it anyway? (Optional robustness)
+      console.error(`Upstream Fetch Error (${fullUrl}):`, error.message);
       throw error; 
     }
   }
@@ -89,14 +93,18 @@ class CacheService {
       // Mirror Home Data
       if (endpoint === 'home' && Array.isArray(data)) {
         for (const item of data) {
-          await Title.upsert({
-            code: item.code || item.id,
-            name: item.name,
-            cover_url: item.cover_url,
-            episodes_total: item.episodes_total || 0,
-            lang: lang,
-            last_synced_at: new Date()
-          });
+          // Robust check for code/id
+          const itemCode = item.code || item.id;
+          if (itemCode) {
+            await Title.upsert({
+              code: itemCode,
+              name: item.name || 'Unknown',
+              cover_url: item.cover_url,
+              episodes_total: item.episodes_total || 0,
+              lang: lang,
+              last_synced_at: new Date()
+            });
+          }
         }
       }
 
@@ -110,11 +118,11 @@ class CacheService {
           locked: e.locked || false,
           lang
         }));
-        await Episode.bulkCreate(episodesToInsert);
         
-        // Update Title count if possible
         if (episodesToInsert.length > 0) {
-           await Title.update({ episodes_total: episodesToInsert.length }, { where: { code }});
+          await Episode.bulkCreate(episodesToInsert);
+          // Update Title count if possible
+          await Title.update({ episodes_total: episodesToInsert.length }, { where: { code }});
         }
       }
     } catch (e) {
