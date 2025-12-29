@@ -1,0 +1,17 @@
+<div class="title-card relative group w-40 md:w-64 flex-none cursor-pointer transition-all duration-300 hover:z-20 hover:scale-110" 
+     onclick="openTitle('<%= item.code %>', '<%= item.name %>', '<%= item.cover_url %>', <%= item.episodes_total %>)">
+    <img src="<%= item.cover_url || 'https://via.placeholder.com/300x450/333/fff?text=' + item.name.substring(0,2) %>" 
+         class="rounded-md object-cover w-full aspect-[2/3] shadow-lg" loading="lazy" alt="<%= item.name %>">
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex flex-col justify-end p-3">
+        <h3 class="text-white font-bold text-sm drop-shadow-md truncate"><%= item.name %></h3>
+        <div class="flex items-center gap-2 text-xs text-green-400 font-semibold mt-1">
+            <span>98% Match</span>
+            <span class="border border-gray-500 px-1 text-gray-300"><%= item.episodes_total %> Eps</span>
+        </div>
+        <div class="flex gap-2 mt-2">
+            <div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200"><i class="fas fa-play text-xs"></i></div>
+            <div class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center hover:border-white"><i class="fas fa-plus text-xs"></i></div>
+        </div>
+    </div>
+</div>
