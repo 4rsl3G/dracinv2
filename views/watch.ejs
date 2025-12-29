@@ -1,0 +1,85 @@
+<div class="w-full h-screen bg-black flex flex-col">
+    <div id="videoContainer" class="relative w-full aspect-video md:h-[80vh] bg-black group overflow-hidden">
+        <video id="video" class="w-full h-full"></video>
+        
+        <div id="loading" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-netRed border-solid"></div>
+        </div>
+
+        <div id="controls" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div class="relative w-full h-1 bg-gray-600 cursor-pointer mb-4 group/progress" id="progressBarContainer">
+                <div id="bufferedBar" class="absolute top-0 left-0 h-full bg-gray-400 w-0 transition-all"></div>
+                <div id="progressBar" class="absolute top-0 left-0 h-full bg-netRed w-0 relative">
+                    <div class="absolute right-0 -top-1.5 w-4 h-4 bg-netRed rounded-full scale-0 group-hover/progress:scale-100 transition-transform shadow-lg"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center text-gray-200">
+                <div class="flex items-center gap-6">
+                    <button id="playPauseBtn" class="text-2xl hover:text-white"><i class="fas fa-play"></i></button>
+                    <button id="rewindBtn" class="hover:text-white"><i class="fas fa-undo-10"></i></button>
+                    <button id="forwardBtn" class="hover:text-white"><i class="fas fa-redo-10"></i></button>
+                    
+                    <div class="flex items-center gap-2 group/vol">
+                        <button id="muteBtn" class="hover:text-white w-6"><i class="fas fa-volume-up"></i></button>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" class="w-0 group-hover/vol:w-24 transition-all h-1 bg-white accent-netRed">
+                    </div>
+
+                    <div class="text-sm font-mono">
+                        <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button class="text-lg font-bold hover:text-white" id="nextEpBtn">NEXT EPISODE</button>
+                    
+                    <div class="relative group/quality">
+                        <button class="hover:text-white font-bold text-sm">HD <i class="fas fa-cog"></i></button>
+                        <div class="absolute bottom-full right-0 mb-2 bg-black/90 p-2 rounded hidden group-hover/quality:block w-32">
+                            <ul id="qualityList" class="text-sm text-gray-300">
+                                <li class="p-1 hover:text-white hover:bg-gray-800 cursor-pointer" data-val="-1">Auto</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button id="speedBtn" class="hover:text-white font-bold text-sm">1x</button>
+                    <button id="fullscreenBtn" class="hover:text-white text-xl"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="absolute top-6 left-6 z-20 text-white text-3xl opacity-50 hover:opacity-100 transition"><i class="fas fa-arrow-left"></i></a>
+        
+        <div class="absolute top-6 right-6 z-10 text-right opacity-0 group-hover:opacity-100 transition">
+             <h2 class="text-2xl font-bold drop-shadow-md"><%= code %></h2>
+             <p class="text-lg text-gray-300">Episode <%= ep %></p>
+        </div>
+    </div>
+
+    <div class="flex-1 bg-[#141414] p-8 overflow-y-auto">
+        <h3 class="text-gray-400 font-bold mb-4 border-b border-gray-700 pb-2">EPISODES</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <% episodes.forEach(e => { %>
+                <a href="/watch/<%= e.code %>/<%= e.episode_number %>?lang=<%= lang %>" 
+                   class="flex items-center gap-4 p-4 rounded hover:bg-gray-800 transition <%= e.episode_number == ep ? 'bg-gray-800 border-l-4 border-netRed' : '' %>">
+                    <div class="text-2xl font-bold text-gray-500"><%= e.episode_number %></div>
+                    <div>
+                        <div class="font-bold text-white">Episode <%= e.episode_number %></div>
+                        <div class="text-sm text-gray-400"><%= e.locked ? 'Locked' : 'Available' %></div>
+                    </div>
+                    <% if(e.locked) { %> <i class="fas fa-lock ml-auto text-gray-500"></i> <% } %>
+                    <% if(e.episode_number == ep) { %> <i class="fas fa-play ml-auto text-white"></i> <% } %>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        code: '<%= code %>',
+        ep: '<%= ep %>',
+        lang: '<%= lang %>'
+    };
+</script>
+<script src="/js/player.js"></script>
