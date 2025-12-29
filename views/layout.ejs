@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title != 'undefined' ? title : 'Netflix Pro' %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              netBlack: '#141414',
+              netRed: '#E50914',
+              netGray: '#e5e5e5'
+            }
+          }
+        }
+      }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-netBlack text-white font-sans antialiased overflow-x-hidden">
+    <%- include('partials/navbar') %>
+    
+    <main class="min-h-screen pb-20">
+        <%- body %>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#181818] rounded-md max-w-4xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl transform transition-all scale-95 opacity-0" id="modalContent">
+            <button class="absolute top-4 right-4 text-white hover:text-netRed z-10 text-2xl" onclick="closeModal()">&times;</button>
+            <div id="modalBody" class="animate-pulse">
+                </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <%- typeof script !== 'undefined' ? script : '' %>
+</body>
+</html>
