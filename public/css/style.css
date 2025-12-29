@@ -1,0 +1,40 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #141414; 
+}
+::-webkit-scrollbar-thumb {
+    background: #333; 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Glass effect */
+.glass {
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: #1f1f1f;
+    background: linear-gradient(110deg, #1f1f1f 8%, #2a2a2a 18%, #1f1f1f 33%);
+    background-size: 200% 100%;
+    animation: shine 1.5s linear infinite;
+}
+@keyframes shine {
+    to { background-position-x: -200%; }
+}
